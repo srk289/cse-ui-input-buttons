@@ -1,0 +1,127 @@
+<!--
+    Relative paths assume component is being run from inside an app or another component, where dependencies are flat
+    siblings. When this component is run from its own repo (e.g. tests, examples), we assume the server is started with
+    'gulp serve' (or similar server setup) to enable correct finding of bower dependencies for local runs.
+-->
+<link rel="import" href="../polymer/polymer.html"/>
+
+<link rel="import" href="css/cse-input-buttons-styles.html">
+
+<!--
+CSE button styles and options
+
+##### Usage
+          
+    <cse-input-buttons 
+      settings='{
+            title: "sdf",  
+            text: "All",
+            type: "default",
+            size: "default"
+          }',
+          ico: {
+              name: "bell",
+              prepend: true 
+          }>
+    </cse-input-buttons>
+
+@element cse-input-buttons
+@blurb This component is used to display button with multiple options
+@homepage index.html
+@demo index.html
+-->
+
+<dom-module id="cse-input-buttons">
+  <template>
+    <style include="cse-input-buttons-styles"></style>
+    <template id="title" is="dom-if" if="{{btn.title}}" restamp="true">
+      <h5>{{btn.title}}</h5>
+    </template>
+    
+    <template is="dom-if" if="{{!btn.group}}">
+      <button class$="{{btn.class}}">
+        <template is="dom-if" if="{{ico.prepend}}">
+          <i class$="fa fa-{{ico.name}}"></i>
+        </template>
+        {{btn.text}}
+        <template is="dom-if" if="{{!ico.prepend}}">
+          <i class$="fa fa-{{ico.name}}"></i>
+        </template>
+      </button>
+    </template>
+    
+    <template is="dom-if" if="{{btn.group}}">
+      <div class=btn-group>
+        <template is="dom-repeat" items="{{btn.items}}">
+          <input checked$="{{item.selected}}" id="{{btn.prefix}}{{index}}" name$="{{btn.prefix}}" type="{{btn.groupType}}">
+          <label for$="{{btn.prefix}}{{index}}" class="btn">
+            <template is="dom-if" if="{{item.ico}}">
+              <i class$="fa fa-{{ item.ico.name }}"></i>
+            </template>
+            {{item.label}}
+          </label>
+        </template>
+      </div>
+    </template>
+
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+
+    is: 'cse-input-buttons', 
+
+    /**
+    * Properties block, expose attribute values to the DOM via 'notify'
+    *
+    * @property properties
+    * @type Object
+    */
+    properties: {
+      /*
+      * Received 'settings' for the button
+      *
+      * @prop settings
+      *
+      */
+      settings: Object,
+      /*
+      * Received 'icon' settings for the button
+      *
+      * @prop settings
+      *
+      */
+      ico: Object,
+      /*
+      * Holds computed value for settings
+      *
+      * @prop settings
+      *
+      */
+      btn: Object
+      
+    },
+    observers: [
+      '_buttonCompute(settings.*)'
+    ],
+    ready: function() {
+      this.btn = Object.assign({}, this.settings);
+      this.btn.class = 'btn btn--'+this.settings.size+' btn--'+this.settings.type;
+    },
+    /**
+    * Computes classes based on the provided settings for the button 
+    *
+    * @method _buttonCompute
+    */
+    _buttonCompute: function(settings) {
+      
+       if (this.btn){
+        this.set('btn.title', settings.base.title);
+        // this.set('btn.class', 'btn btn--'+settings.base.size+' btn--'+settings.base.type);
+      }
+     
+    }
+
+  });
+</script>
