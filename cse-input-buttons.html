@@ -4,9 +4,12 @@
     'gulp serve' (or similar server setup) to enable correct finding of bower dependencies for local runs.
 -->
 <link rel="import" href="../polymer/polymer.html"/>
+<link rel="import" href="../app-datepicker/app-datepicker-dialog.html">
+<link rel="import" href="../paper-button/paper-button.html">
 
 <link rel="import" href="css/cse-input-buttons-styles.html">
 
+<script src="../moment/moment.js"></script>
 <!--
 CSE button styles and options
 
@@ -33,13 +36,20 @@ CSE button styles and options
 
 <dom-module id="cse-input-buttons">
   <template>
-    <style include="cse-input-buttons-styles"></style>
+    <style include="cse-input-buttons-styles">
+      
+      .selected, .selected:hover{
+        background: #086e87;
+        color: #fff;
+      }
+
+    </style>
     <template id="title" is="dom-if" if="{{btn.title}}" restamp="true">
       <h5>{{btn.title}}</h5>
     </template>
     
-    <template is="dom-if" if="{{!btn.group}}">
-      <button class$="{{btn.class}}">
+    <template is="dom-if" if="{{!settings.group}}">
+      <button id="{{btn.id}}" on-tap="_buttonTap" class$="{{btn.class}}">
         <template is="dom-if" if="{{ico.prepend}}">
           <i class$="fa fa-{{ico.name}}"></i>
         </template>
@@ -49,12 +59,12 @@ CSE button styles and options
         </template>
       </button>
     </template>
-    
-    <template is="dom-if" if="{{btn.group}}">
-      <div class=btn-group>
-        <template is="dom-repeat" items="{{btn.items}}">
-          <input checked$="{{item.selected}}" id="{{btn.prefix}}{{index}}" name$="{{btn.prefix}}" type="{{btn.groupType}}">
-          <label for$="{{btn.prefix}}{{index}}" class="btn">
+    <template is="dom-if" if="{{settings.group}}">
+      <div class="btn-group">
+
+        <template is="dom-repeat" items="{{settings.items}}">
+          <input disabled="{{settings.disabled}}" on-tap="_buttonGroupTap" checked$="{{item.selected}}" id$="{{item.id}}" index="{{index}}" name$="{{btn.id}}" type="{{settings.groupType}}">
+          <label disabled="{{settings.disabled}}" for$="{{item.id}}" class$="btn btn--{{settings.type}} btn--{{settings.size}}">
             <template is="dom-if" if="{{item.ico}}">
               <i class$="fa fa-{{ item.ico.name }}"></i>
             </template>
@@ -63,8 +73,19 @@ CSE button styles and options
         </template>
       </div>
     </template>
-
+    <template is="dom-if" if="{{_checkStrs(ico.name, 'calendar')}}">
+      <app-datepicker-dialog id="startDatePicker"
+                             date="{{dateRange.startDate}}"
+                             input-date="[[dateRange.startDate]]"
+                             with-backdrop></app-datepicker-dialog>
+      <app-datepicker-dialog id="endDatePicker"
+                             date="{{dateRange.endDate}}"
+                             input-date="[[dateRange.endDate]]"
+                             min-date="[[dateRange.startDate]]"
+                             with-backdrop></app-datepicker-dialog>
+    </template>
   </template>
+  
 </dom-module>
 
 <script>
@@ -80,48 +101,227 @@ CSE button styles and options
     */
     properties: {
       /*
+      * Button's selected class 
+      *
+      * @prop selectedclass
+      * @type String
+      */
+      selectedClass: { 
+        type: String,
+        value: 'selected'
+      },
+      /*
       * Received 'settings' for the button
       *
       * @prop settings
       *
       */
-      settings: Object,
+      settings: { 
+        type: Object,
+        notify: true
+      },
       /*
       * Received 'icon' settings for the button
-      *
-      * @prop settings
+      * ico : {name: "bell" // Class names from fontawesome.
+      *        prepend: true/false // Display icon after or before button text
+      *       }
+      * @prop ico
       *
       */
       ico: Object,
       /*
       * Holds computed value for settings
       *
-      * @prop settings
+      * @prop btn
       *
       */
-      btn: Object
-      
+      btn: Object,
+      dateRange: {
+        type: Object
+        // value: function () {
+        //   return {
+        //     startDate: '',
+        //     endDate: ''
+        //   };
+        // }
+      }
+    },
+    /**
+    * Opens start date dialog box
+    *
+    * @method openStartDate
+    */
+    openStartDate: function() {
+      var startDatePickerEl = Polymer.dom(this.root).querySelector('#startDatePicker');
+      if(startDatePickerEl) {
+        startDatePickerEl.open();
+      }
+    },
+    /**
+    * Opens end date dialog box
+    *
+    * @method openEndDate
+    */
+    openEndDate: function() {
+      var endDatePickerEl = Polymer.dom(this.root).querySelector('#endDatePicker');
+      if(endDatePickerEl) {
+        endDatePickerEl.open();
+      }
     },
     observers: [
-      '_buttonCompute(settings.*)'
+      '_settingsObserve(settings.*)',
+      '_icoObserve(ico.*)',
+      '_dateRangeChanged(dateRange.*)'
     ],
     ready: function() {
       this.btn = Object.assign({}, this.settings);
-      this.btn.class = 'btn btn--'+this.settings.size+' btn--'+this.settings.type;
+      this.btn.selectedClass = this.selectedClass;
+      this._buttonClassCompute();
     },
+
     /**
-    * Computes classes based on the provided settings for the button 
+    * Observes for changes in settings of the button
     *
-    * @method _buttonCompute
+    * @method _settingsObserve
     */
-    _buttonCompute: function(settings) {
-      
-       if (this.btn){
+    _settingsObserve: function(settings) {
+       
+       if (this.btn) {
         this.set('btn.title', settings.base.title);
-        // this.set('btn.class', 'btn btn--'+settings.base.size+' btn--'+settings.base.type);
+        this.set('btn.text', settings.base.text);
+
+        if(settings.base.type !== this.btn.type || settings.base.size !== this.btn.size) {
+          this._set('btn.size', settings.base.size);
+          this._set('btn.type', settings.base.type);
+          this._buttonClassCompute();
+        }
       }
      
-    }
+    },
+    /**
+    * Observes for changes in icon settings of the button
+    *
+    * @method _settingsObserve
+    */
+    _icoObserve: function(ico) {
+      if(ico.base.name) {
+        this._set('btn.ico.name', ico.base.name);
+      }
+    },
+    /**
+    * Toggles selected status, fires selected button status, toggles class for the button
+    *
+    * @method _buttonTap
+    */
+    _buttonTap: function(e) {
+      if(this.ico && this.ico.name === 'calendar') {
+        this.dateRange = this.dateRange || {};
+        this.dateRange.startDate = this.dateRange.startDate || moment(new Date()).format('YYYYMMDD');
+        this.dateRange.endDate = this.dateRange.endDate || moment(new Date()).format('YYYYMMDD');
+        this.openStartDate();
+      }
+      else{
+        this._toggleSelected(e);
+      }
+    },
+    _buttonGroupTap: function (e){
+      var newItem;
+      // Dirty way: need to revisit. Array changes doesnt get notified with .set method.
+      if(this.settings.groupType === 'checkbox') {
+        newItem = Object.assign({}, this.settings.items[e.target.index]);
+        newItem.selected = e.target.checked;
+        this.splice('settings.items', e.target.index, 1, newItem);
+      }
+      else { // Radio
+        newItem = Object.assign([], this.settings.items);
+        var len = newItem.length;
+        for(i =0; i<len; i++) {
+          newItem[i].selected = false;
+        }
+        newItem[e.target.index].selected = true;
+        this.set('settings.items', newItem);
+      }
+
+      var value = {};
+      for(var i=0; i<this.settings.items.length; i++) {
+        value[this.settings.items[i].id] = this.settings.items[i].selected;
+      }
+      this._fire('button-group-click', {key: this.btn.id, val: value});
+    },
+    /**
+    * Toggles selected status, fires selected button status, toggles class for the button
+    *
+    * @method _toggleSelected
+    */
+    _toggleSelected: function(e) {
+      // Toggle settings.selected boolean
+      if(this.settings.type !== 'disabled') {
+        this._set('settings.selected', !this.settings.selected);
+        this._fire('button-clicked', { key: this.btn.id, val: this.settings.selected });
+        this._toggleClass(this.selectedClass, this.settings.selected, e.currentTarget);
+      }
+    },
+    /**
+    * Sets obj value 
+    *
+    * @method _set
+    */
+    _set: function(obj, val) {
+      this.set(obj, val);
+    },
+    /**
+    * Fires events: 
+    * 1. 'date-changed': on date change {key: ID_OF_CALENDARBUTTON, value: {startdate: dd/mm/yy, enddate: dd/mm/yy}} // 
+    * 2. 'button-clicked': on button click {key: ID_OF_BUTTON, value: boolean}
+    * @event _fire
+    */
+    _fire: function(eventName, val) {
+      this.fire(eventName, val);
+    },
+    /**
+    * Toggles given class on given element 
+    *
+    * @method _toggleClass
+    */
+    _toggleClass: function(className, bool, ele) {
+      this.toggleClass(className, bool, ele);
+    },
+    /**
+    * Computes class for button 
+    *
+    * @method _buttonClassCompute
+    */
+    _buttonClassCompute: function() {
+      var self = this;
+      var btnClass = self.btn.class;
+      self.btn.class = 'btn btn--'+self.settings.size+' btn--'+self.settings.type;
+
+      var buttonEle = Polymer.dom(self.root).querySelector('button');
+      if(buttonEle) {
+        buttonEle.className = buttonEle.className.replace(btnClass, self.btn.class);
+      }
+    },
+    /**
+    * Check strings 
+    *
+    * @method _checkStrs
+    */
+    _checkStrs: function(str1, str2) {
+      return (str1 === str2);
+    },
+    /**
+    * Check for changes in date selector 
+    *
+    * @method _dateRangeChanged
+    */
+    _dateRangeChanged: function (newDate) {
+      if(newDate.path === 'dateRange.startDate') {
+        this.openEndDate();
+      }
+      // else if(newDate.path === 'dateRange.endDate') {
+      //   this._fire('date-changed', {key: this.btn.id, val: newDate.base});
+      // }
+    },
 
   });
 </script>

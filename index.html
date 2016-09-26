@@ -21,6 +21,11 @@
   <link rel="import" href="../px-demo-snippet/px-demo-snippet.html">
   <link rel="import" href="../px-polymer-font-awesome/polymer-font-awesome.html" />
   <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
+  <style>
+    .test-selected-class.cse-input-buttons, .test-selected-class.cse-input-buttons:hover{
+      background: yellow;
+    }
+  </style>
 </head>
 
 <body>
@@ -56,36 +61,231 @@
         </px-tab-set>
       </div>
       <px-tab-pages selected="{{selected}}">
-        <template is="dom-repeat" items="{{optionsArray}}">
+        <template id="opArr" is="dom-repeat" items="{{optionsArray}}">
           <section class="tab-page">
             <div class="mega-demo flex u-ph++ u-pb++">
               <!-- Properties -->
               <div class="properties u-ph+ u-pb+ u-mt+">
                 <p class="epsilon">Properties</p>
-                
-                <!-- //code sample for dropdown -->
-                <div class="u-mb-">DROPDOWN TITLE:
-                  <div style="width: 100%;">
-                    <px-dropdown id="dropdownName{{indexPlusOne(index)}}" value="{{item.ico.prepend}}" display-value="{{item.ico.prepend}}" bound-target="properties">
-                      <px-dropdown-content
-                        items='[
-                          {"key":"one", "val": true},
-                          {"key":"two", "val": false}]'>
-                      </px-dropdown-content>
-                    </px-dropdown>
-                  </div>
-                </div> 
-                
-                <!-- //code sample for input box: -->
-                <div class="u-mb-">Type new title: <input class="text-input" type="text" placeholder="{{item.settings.title}}" value="{{item.settings.title::input}}" /></div> 
-                
-                <!-- //code for boolean option -->
-                <div class="flex u-mb-">
-                  <input id="booleanID{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.booleanID::change}}">
-                  <label for$="booleanID{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
-                  <div class="u-ml-">BOOLEAN TITLE</div>
-                </div> 
+                <template is="dom-if" if="{{_checkIndex(index, 0)}}">
+                  <div class="u-mb-">Type:
+                    <div style="width: 100%;">
+                      <px-dropdown id="type{{indexPlusOne(index)}}" value="{{item.settings.type}}" display-value="{{item.settings.type}}" bound-target="properties">
+                        <px-dropdown-content
+                          items='[
+                            {"key":"primary", "val": "primary"},
+                            {"key":"default", "val": "default"},
+                            {"key":"tertiary", "val": "tertiary"},
+                            {"key":"disabled", "val": "disabled"},
+                            {"key":"bare", "val": "bare"},
+                            {"key":"full", "val": "full"}]'>
+                        </px-dropdown-content>
+                      </px-dropdown>
+                    </div>
+                  </div> 
+                  <div class="u-mb-">Size:
+                    <div style="width: 100%;">
+                      <px-dropdown id="size{{indexPlusOne(index)}}" value="{{item.settings.size}}" display-value="{{item.settings.size}}" bound-target="properties">
+                        <px-dropdown-content
+                          items='[
+                            {"key":"default", "val": "default"},
+                            {"key":"small", "val": "small"},
+                            {"key":"large", "val": "large"},
+                            {"key":"huge", "val": "huge"}]'>
+                        </px-dropdown-content>
+                      </px-dropdown>
+                    </div>
+                  </div> 
+                  <!-- //code sample for input box: -->
+                  <div class="u-mb-">Type new title: <input class="text-input" type="text" placeholder="{{item.settings.title}}" value="{{item.settings.title::input}}" /></div> 
+                 
+                  <div class="u-mb-">Type button text: <input class="text-input" type="text" placeholder="{{item.settings.text}}" value="{{item.settings.text::input}}" /></div> 
+                  
 
+                  <!-- //code for boolean option -->
+                  <!-- <div class="flex u-mb-">
+                    <input id="ico{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.ico::change}}">
+                    <label for$="ico{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                    <div class="u-ml-">Icon</div>
+                  </div>  -->
+                </template>
+                <template is="dom-if" if="{{_checkIndex(index, 1)}}">
+                  <div class="u-mb-">Type:
+                    <div style="width: 100%;">
+                      <px-dropdown id="type{{indexPlusOne(index)}}" value="{{item.settings.type}}" display-value="{{item.settings.type}}" bound-target="properties">
+                        <px-dropdown-content
+                          items='[
+                            {"key":"primary", "val": "primary"},
+                            {"key":"default", "val": "default"},
+                            {"key":"tertiary", "val": "tertiary"},
+                            {"key":"disabled", "val": "disabled"},
+                            {"key":"bare", "val": "bare"},
+                            {"key":"full", "val": "full"}]'>
+                        </px-dropdown-content>
+                      </px-dropdown>
+                    </div>
+                  </div> 
+                  <div class="u-mb-">Size:
+                    <div style="width: 100%;">
+                      <px-dropdown id="size{{indexPlusOne(index)}}" value="{{item.settings.size}}" display-value="{{item.settings.size}}" bound-target="properties">
+                        <px-dropdown-content
+                          items='[
+                            {"key":"default", "val": "default"},
+                            {"key":"small", "val": "small"},
+                            {"key":"large", "val": "large"},
+                            {"key":"huge", "val": "huge"}]'>
+                        </px-dropdown-content>
+                      </px-dropdown>
+                    </div>
+                  </div> 
+                  <!-- //code sample for input box: -->
+                  <div class="u-mb-">Type new title: <input class="text-input" type="text" placeholder="{{item.settings.title}}" value="{{item.settings.title::input}}" /></div> 
+                 
+                  <div class="u-mb-">Type button text: <input class="text-input" type="text" placeholder="{{item.settings.text}}" value="{{item.settings.text::input}}" /></div> 
+                  
+                  <h4>Icon Settings</h4>
+                  <div class="u-mb-">Icon Prepend:
+                    <div style="width: 100%;">
+                      <px-dropdown id="dropdownName{{indexPlusOne(index)}}" value="{{item.ico.prepend}}" display-value="{{item.ico.prepend}}" bound-target="properties">
+                        <px-dropdown-content
+                          items='[
+                            {"key":"one", "val": true},
+                            {"key":"two", "val": false}]'>
+                        </px-dropdown-content>
+                      </px-dropdown>
+                    </div>
+                  </div> 
+                  <div class="u-mb-">Type ico class: <input class="text-input" type="text" placeholder="{{item.settings.ico.name}}" value="{{item.ico.name::input}}" /></div> 
+
+                  <!-- //code for boolean option -->
+                  <!-- <div class="flex u-mb-">
+                    <input id="ico{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.ico::change}}">
+                    <label for$="ico{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                    <div class="u-ml-">Icon</div>
+                  </div>  -->
+                </template>
+                <template is="dom-if" if="{{_checkIndex(index, 2)}}">
+                  <div class="u-mb-">Type:
+                    <div style="width: 100%;">
+                      <px-dropdown id="type{{indexPlusOne(index)}}" value="{{item.settings.type}}" display-value="{{item.settings.type}}" bound-target="properties">
+                        <px-dropdown-content
+                          items='[
+                            {"key":"primary", "val": "primary"},
+                            {"key":"default", "val": "default"},
+                            {"key":"tertiary", "val": "tertiary"},
+                            {"key":"disabled", "val": "disabled"},
+                            {"key":"bare", "val": "bare"},
+                            {"key":"full", "val": "full"}]'>
+                        </px-dropdown-content>
+                      </px-dropdown>
+                    </div>
+                  </div> 
+                  <div class="u-mb-">Size:
+                    <div style="width: 100%;">
+                      <px-dropdown id="size{{indexPlusOne(index)}}" value="{{item.settings.size}}" display-value="{{item.settings.size}}" bound-target="properties">
+                        <px-dropdown-content
+                          items='[
+                            {"key":"default", "val": "default"},
+                            {"key":"small", "val": "small"},
+                            {"key":"large", "val": "large"},
+                            {"key":"huge", "val": "huge"}]'>
+                        </px-dropdown-content>
+                      </px-dropdown>
+                    </div>
+                  </div> 
+                  <!-- //code sample for input box: -->
+                  <div class="u-mb-">Type new title: <input class="text-input" type="text" placeholder="{{item.settings.title}}" value="{{item.settings.title::input}}" /></div> 
+                </template>
+                <template is="dom-if" if="{{_checkIndex(index, 3)}}">
+                  <div class="u-mb-">Type:
+                    <div style="width: 100%;">
+                      <px-dropdown id="type{{indexPlusOne(index)}}" value="{{item.settings.type}}" display-value="{{item.settings.type}}" bound-target="properties">
+                        <px-dropdown-content
+                          items='[
+                            {"key":"primary", "val": "primary"},
+                            {"key":"default", "val": "default"},
+                            {"key":"tertiary", "val": "tertiary"},
+                            {"key":"disabled", "val": "disabled"},
+                            {"key":"bare", "val": "bare"},
+                            {"key":"full", "val": "full"}]'>
+                        </px-dropdown-content>
+                      </px-dropdown>
+                    </div>
+                  </div> 
+                  <div class="u-mb-">Size:
+                    <div style="width: 100%;">
+                      <px-dropdown id="size{{indexPlusOne(index)}}" value="{{item.settings.size}}" display-value="{{item.settings.size}}" bound-target="properties">
+                        <px-dropdown-content
+                          items='[
+                            {"key":"default", "val": "default"},
+                            {"key":"small", "val": "small"},
+                            {"key":"large", "val": "large"},
+                            {"key":"huge", "val": "huge"}]'>
+                        </px-dropdown-content>
+                      </px-dropdown>
+                    </div>
+                  </div> 
+                  <!-- //code sample for input box: -->
+                  <div class="u-mb-">Type new title: <input class="text-input" type="text" placeholder="{{item.settings.title}}" value="{{item.settings.title::input}}" /></div> 
+                </template>
+                <template is="dom-if" if="{{_checkIndex(index, 4)}}">
+                  <div class="u-mb-">Type:
+                    <div style="width: 100%;">
+                      <px-dropdown id="type{{indexPlusOne(index)}}" value="{{item.settings.type}}" display-value="{{item.settings.type}}" bound-target="properties">
+                        <px-dropdown-content
+                          items='[
+                            {"key":"primary", "val": "primary"},
+                            {"key":"default", "val": "default"},
+                            {"key":"tertiary", "val": "tertiary"},
+                            {"key":"disabled", "val": "disabled"},
+                            {"key":"bare", "val": "bare"},
+                            {"key":"full", "val": "full"}]'>
+                        </px-dropdown-content>
+                      </px-dropdown>
+                    </div>
+                  </div> 
+                  <div class="u-mb-">Size:
+                    <div style="width: 100%;">
+                      <px-dropdown id="size{{indexPlusOne(index)}}" value="{{item.settings.size}}" display-value="{{item.settings.size}}" bound-target="properties">
+                        <px-dropdown-content
+                          items='[
+                            {"key":"default", "val": "default"},
+                            {"key":"small", "val": "small"},
+                            {"key":"large", "val": "large"},
+                            {"key":"huge", "val": "huge"}]'>
+                        </px-dropdown-content>
+                      </px-dropdown>
+                    </div>
+                  </div> 
+                  <!-- //code sample for input box: -->
+                  <div class="u-mb-">Type new title: <input class="text-input" type="text" placeholder="{{item.settings.title}}" value="{{item.settings.title::input}}" /></div> 
+                 
+                  <div class="u-mb-">Type button text: <input class="text-input" type="text" placeholder="{{item.settings.text}}" value="{{item.settings.text::input}}" /></div> 
+                  
+                  <h4>Icon Settings</h4>
+                  <div class="u-mb-">Icon Prepend:
+                    <div style="width: 100%;">
+                      <px-dropdown id="dropdownName{{indexPlusOne(index)}}" value="{{item.ico.prepend}}" display-value="{{item.ico.prepend}}" bound-target="properties">
+                        <px-dropdown-content
+                          items='[
+                            {"key":"one", "val": true},
+                            {"key":"two", "val": false}]'>
+                        </px-dropdown-content>
+                      </px-dropdown>
+                    </div>
+                  </div> 
+                  <div class="u-mb-">Type ico class: <input class="text-input" type="text" placeholder="{{item.settings.ico.name}}" value="{{item.ico.name::input}}" /></div> 
+                  
+                  <h4>Date Settings</h4>
+                  <div class="u-mb-">Start Date: <input class="text-input" type="text" placeholder="{{item.dateRange.startDate}}" value="{{item.dateRange.startDate::input}}" /></div> 
+                  <div class="u-mb-">End Date: <input class="text-input" type="text" placeholder="{{item.dateRange.endDate}}" value="{{item.dateRange.endDate::input}}" /></div> 
+                  <!-- //code for boolean option -->
+                  <!-- <div class="flex u-mb-">
+                    <input id="ico{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.ico::change}}">
+                    <label for$="ico{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                    <div class="u-ml-">Icon</div>
+                  </div>  -->
+                </template>
               </div>
 
               <div class="demoContainer u-mt+">
@@ -93,8 +293,26 @@
                 <div class="flex flex--col">
                   <div class="flex__item demo u-ph+ u-pb+">
                     <div class="u-mt+">
-                      <cse-input-buttons settings="{{item.settings}}" ico="{{item.ico}}">
-                      </cse-input-buttons>
+                      <template id="option1" is="dom-if" if="{{_checkIndex(index, 0)}}">
+                        <cse-input-buttons id="option1El" settings="{{item.settings}}" ico="{{item.ico}}" selected-class="{{item.selectedClass}}">
+                        </cse-input-buttons>
+                      </template>
+                      <template id="option2" is="dom-if" if="{{_checkIndex(index, 1)}}">
+                        <cse-input-buttons id="option2El" settings="{{item.settings}}" ico="{{item.ico}}">
+                        </cse-input-buttons>
+                      </template>
+                      <template id="option3" is="dom-if" if="{{_checkIndex(index, 2)}}">
+                        <cse-input-buttons id="option3El" settings="{{item.settings}}" ico="{{item.ico}}" selected="{{selected}}">
+                        </cse-input-buttons>
+                      </template>
+                      <template id="option4" is="dom-if" if="{{_checkIndex(index, 3)}}">
+                        <cse-input-buttons id="option4El" settings="{{item.settings}}" ico="{{item.ico}}">
+                        </cse-input-buttons>
+                      </template>
+                      <template id="option5" is="dom-if" if="{{_checkIndex(index, 4)}}">
+                        <cse-input-buttons id="option5El" settings="{{item.settings}}" ico="{{item.ico}}" date-range="{{item.dateRange}}">
+                        </cse-input-buttons>
+                      </template>
                     </div>
                   </div>
                   <div class="flex__item">
@@ -163,16 +381,34 @@
     </footer>
   </template>
   <script>
+    var _checkIndex = function(index, i){
+        debugger
+        var check = index === i;
+        return index === i;
+      };
     window.addEventListener('WebComponentsReady', function() {
 
       var template = document.querySelector('template[is=dom-bind]'),
           optionsArray = [
             {
+              settings: {
+                title: 'Title Option 1',  
+                text: 'All',
+                type: 'default',
+                size: 'default',
+                id: 'option1'
+              },
+              selectedClass: "test-selected-class",
+              lightDomContent: ''
+            },
+            {
               settings : {
-                  title: "skdhf",  
+                  title: "Title option 2",  
                   text: "All",
                   type: "default",
-                  size: "default"
+                  size: "large",
+                  selected: false,
+                  id: "option2"
                 },
               ico: {
                     name: "bell",
@@ -188,62 +424,86 @@
                 items: [
                  {
                    label: 'All',
+                   id: 'one',
                    ico: {
                      name: 'bell',
                      prepend: true
-                   }
+                   },
+                   selected: false
                  },
                  {
                    label: '',
+                   id: 'two',
                    ico: {
                      name: 'bell'
-                   }
+                   },
+                   selected: false
                  },
                  {
-                   label: 'test'
+                   id: 'three',
+                   label: 'test',
+                   selected: true
                  }
                 ],
-                prefix: 'test1',
-                title: 'asdf'
+                title: 'Title Option 3',
+                id: 'option3',
+                size: 'default',
+                type: 'default'
               },
               lightDomContent: ''
             },
             {
               settings: {
-                        disabled: false,
-                        group: true,
-                        groupType: 'radio',
-                        items: [
-                         {
-                           label: 'All',
-                           selected: true,
-                           ico: {
-                             name: 'bell',
-                             prepend: true
-                           }
-                         },
-                         {
-                           label: '',
-                           ico: {
-                             name: 'bell'
-                           }
-                         },
-                         {
-                           label: 'test'
-                         }
-                        ],
-                        prefix: 'test2',
-                        title: 'daf'
+                  disabled: false,
+                  group: true,
+                  groupType: 'radio',
+                  items: [
+                   {
+                     label: 'All',
+                     id: 'cone',
+                     ico: {
+                       name: 'bell',
+                       prepend: true
+                     },
+                     selected: true
+                   },
+                   {
+                     label: '',
+                     id: 'ctwo',
+                     ico: {
+                       name: 'bell'
+                     },
+                     selected: false
+                   },
+                   {
+                     label: 'test',
+                     id: 'cthree',
+                     selected: false
+                   }
+                  ],
+                  title: 'Title Option 4',
+                  size: 'default',
+                  type: 'default',
+                  id: 'option4'
               },
               lightDomContent: ''
             },
             {
               settings: {
-                title: 'asdf',  
-                text: 'All',
+                title: '',  
+                text: '',
                 type: 'default',
-                size: 'default'
+                size: 'bare',
+                id: 'option5'
               },
+              dateRange: {
+                
+              },
+              ico: {
+                  name: "calendar",
+                  prepend: true
+              },
+              selectedClass: "test-selected-class",
               lightDomContent: ''
             }
           ],
@@ -251,101 +511,48 @@
             return num + 1;
           };
 
-          template.selected = "0";
-          template.optionsArray = optionsArray;
-          template.indexPlusOne = indexPlusOne;
+      template.selected = "3";
+      template.optionsArray = optionsArray;
+      template.indexPlusOne = indexPlusOne;
+      template._checkIndex = function(index, i){
+        return index === i;
+      };
 
+      
+      template.tempOpArr = document.querySelector('#opArr');
+      var self = this;
+      
+      template.tempOpArr.addEventListener('dom-change', function(e){
+        
+        template.tempOpArr.async(function(){
+          
+          var option1 = Polymer.dom(self.root).querySelector('#option1El');
+          option1.addEventListener('button-clicked', function(e){
+            console.log('button-clicked', e.detail);
+          });
 
-          // template.settings1 = {
-          //   disabled: false,
-          //   group: true,
-          //   groupType: 'checkbox',
-          //   items: [
-          //    {
-          //      label: 'All',
-          //      ico: {
-          //        name: 'bell',
-          //        prepend: true
-          //      }
-          //    },
-          //    {
-          //      label: '',
-          //      ico: {
-          //        name: 'bell'
-          //      }
-          //    },
-          //    {
-          //      label: 'test'
-          //    }
-          //   ],
-          //   prefix: 'test1',
-          //   title: 'asdf'
-          // };
+          var option2 = Polymer.dom(self.root).querySelector('#option2El');
+          option2.addEventListener('button-clicked', function(e){
+            console.log('button-clicked', e.detail);
+          });
+          
+          var option3 = Polymer.dom(self.root).querySelector('#option3El');
+          option3.addEventListener('button-group-click', function(e){
+            console.log('button-group-click', e.detail);
+          });
 
-          // template.settings2 = {
-          //   disabled: false,
-          //   group: true,
-          //   groupType: 'radio',
-          //   items: [
-          //    {
-          //      label: 'All',
-          //      selected: true,
-          //      ico: {
-          //        name: 'bell',
-          //        prepend: true
-          //      }
-          //    },
-          //    {
-          //      label: '',
-          //      ico: {
-          //        name: 'bell'
-          //      }
-          //    },
-          //    {
-          //      label: 'test'
-          //    }
-          //   ],
-          //   prefix: 'test2',
-          //   title: 'daf'
-          // };
+          var option4 = Polymer.dom(self.root).querySelector('#option4El');
+          option4.addEventListener('button-group-click', function(e){
+            console.log('button-group-click', e.detail);
+          });
 
-          // template.settings3 = {
-          //   ico: {
-          //     name: 'bell',
-          //     prepend: true
-          //   },
-          //   title: 'sdf',  
-          //   text: 'All',
-          //   type: 'default',
-          //   size: 'default'
-          // }
-
-          // template.settings4 = {
-          //   title: 'asdf',  
-          //   text: 'All',
-          //   type: 'default',
-          //   size: 'default'
-          // }
-
-          // template.settings4 = {
-          //   title: 'asdf',  
-          //   text: '',
-          //   type: 'icon',
-          //   ico: {
-          //     name: 'bell'
-          //   },
-          //   size: 'default'
-          // }
-
-          // template.settings5 = {
-          //   title: 'asdf',  
-          //   text: '',
-          //   type: 'default',
-          //   ico: {
-          //     name: 'bell'
-          //   },
-          //   size: 'default'
-          // }
+          var option5 = Polymer.dom(self.root).querySelector('#option5El');
+          option5.addEventListener('date-changed', function(e){
+            console.log('date-changed', e.detail);
+          })
+        });
+        
+      })
     });
   </script>
 </body>

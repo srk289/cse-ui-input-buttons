@@ -24,7 +24,9 @@
     "polymer": "^1.6.0",
     "px-theme": "~1.1.2",
     "px-buttons-design": "^0.4.26",
-    "px-button-group-design": "https://github.com/PredixDev/px-button-group-design.git#^0.3.12"
+    "px-button-group-design": "https://github.com/PredixDev/px-button-group-design.git#^0.3.12",
+    "app-datepicker": "^2.8.0",
+    "moment": "^2.15.1"
   },
   "devDependencies": {
     "px-forms-design": "#~0.3.15",
@@ -42,7 +44,8 @@
     "px-list-bare-design": "^0.2.13",
     "px-meta-lists-design": "^0.3.4",
     "px-dropdown": "^0.11.2",
-    "px-starter-kit-design": "~0.6.0"
+    "px-starter-kit-design": "~0.6.0",
+    "paper-dialog": "PolymerElements/paper-dialog#^1.0.3"
   },
   "resolutions": {
     "px-theme": "^1.1.2",
