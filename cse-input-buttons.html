@@ -63,7 +63,8 @@ CSE button styles and options
       <div class="btn-group">
 
         <template is="dom-repeat" items="{{settings.items}}">
-          <input disabled="{{settings.disabled}}" on-tap="_buttonGroupTap" checked$="{{item.selected}}" id$="{{item.id}}" index="{{index}}" name$="{{btn.id}}" type="{{settings.groupType}}">
+          
+          <input disabled="{{settings.disabled}}" on-tap="_buttonGroupTap" checked$="[[_getValue(settings.selectedGroup, item.id)]]" id$="{{item.id}}" index="{{index}}" name$="{{btn.id}}" type="{{settings.groupType}}">
           <label disabled="{{settings.disabled}}" for$="{{item.id}}" class$="btn btn--{{settings.type}} btn--{{settings.size}}">
             <template is="dom-if" if="{{item.ico}}">
               <i class$="fa fa-{{ item.ico.name }}"></i>
@@ -146,6 +147,9 @@ CSE button styles and options
         // }
       }
     },
+    _getValue: function(obj, key) {
+      return obj[key];
+    },
     /**
     * Opens start date dialog box
     *
@@ -225,28 +229,43 @@ CSE button styles and options
       }
     },
     _buttonGroupTap: function (e){
-      var newItem;
+      // var newItem;
       // Dirty way: need to revisit. Array changes doesnt get notified with .set method.
+      // if(this.settings.groupType === 'checkbox') {
+      //   newItem = Object.assign({}, this.settings.items[e.target.index]);
+      //   newItem.selected = e.target.checked;
+      //   this.splice('settings.items', e.target.index, 1, newItem);
+      // }
+      // else { // Radio
+      //   newItem = Object.assign([], this.settings.items);
+      //   var len = newItem.length;
+      //   for(i =0; i<len; i++) {
+      //     newItem[i].selected = false;
+      //   }
+      //   newItem[e.target.index].selected = true;
+      //   this.set('settings.items', newItem);
+      // }
+
+      // var value = {};
+      // for(var i=0; i<this.settings.items.length; i++) {
+      //   value[this.settings.items[i].id] = this.settings.items[i].selected;
+      // }
+      var newSelected = Object.assign({}, this.settings.selectedGroup);
       if(this.settings.groupType === 'checkbox') {
-        newItem = Object.assign({}, this.settings.items[e.target.index]);
-        newItem.selected = e.target.checked;
-        this.splice('settings.items', e.target.index, 1, newItem);
+        
+        newSelected[e.target.id] = !newSelected[e.target.id];
+        this.set('settings.selectedGroup', newSelected);
       }
-      else { // Radio
-        newItem = Object.assign([], this.settings.items);
-        var len = newItem.length;
-        for(i =0; i<len; i++) {
-          newItem[i].selected = false;
+      if(this.settings.groupType === 'radio') {
+        for (var prop in newSelected) {
+          // console.log("obj." + prop + " = " + obj[prop]);
+          newSelected[prop] = false;
         }
-        newItem[e.target.index].selected = true;
-        this.set('settings.items', newItem);
+        newSelected[e.target.id] = true;
+        this.set('settings.selectedGroup', newSelected);
       }
 
-      var value = {};
-      for(var i=0; i<this.settings.items.length; i++) {
-        value[this.settings.items[i].id] = this.settings.items[i].selected;
-      }
-      this._fire('button-group-click', {key: this.btn.id, val: value});
+      this._fire('button-group-click', {key: this.btn.id, val: this.settings.selectedGroup});
     },
     /**
     * Toggles selected status, fires selected button status, toggles class for the button

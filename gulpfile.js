@@ -73,7 +73,7 @@ gulp.task('watch', function() {
 
 gulp.task('serve', function() {
   browserSync.init({
-    port: 8080,
+    port: 5001,
     notify: false,
     reloadOnRestart: true,
     logPrefix: `${pkg.name}`,

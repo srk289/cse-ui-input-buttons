@@ -428,27 +428,29 @@
                    ico: {
                      name: 'bell',
                      prepend: true
-                   },
-                   selected: false
+                   }
                  },
                  {
                    label: '',
                    id: 'two',
                    ico: {
                      name: 'bell'
-                   },
-                   selected: false
+                   }
                  },
                  {
                    id: 'three',
-                   label: 'test',
-                   selected: true
+                   label: 'test'
                  }
                 ],
                 title: 'Title Option 3',
                 id: 'option3',
                 size: 'default',
-                type: 'default'
+                type: 'default',
+                selectedGroup: {
+                  'one': true,
+                  'two': false,
+                  'three': false
+                }
               },
               lightDomContent: ''
             },
@@ -464,27 +466,29 @@
                      ico: {
                        name: 'bell',
                        prepend: true
-                     },
-                     selected: true
+                     }
                    },
                    {
                      label: '',
                      id: 'ctwo',
                      ico: {
                        name: 'bell'
-                     },
-                     selected: false
+                     }
                    },
                    {
                      label: 'test',
-                     id: 'cthree',
-                     selected: false
+                     id: 'cthree'
                    }
                   ],
                   title: 'Title Option 4',
                   size: 'default',
                   type: 'default',
-                  id: 'option4'
+                  id: 'option4',
+                  selectedGroup: {
+                    'cone': true,
+                    'ctwo': false,
+                    'cthree': false
+                  }
               },
               lightDomContent: ''
             },
