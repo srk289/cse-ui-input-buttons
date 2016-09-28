@@ -276,7 +276,7 @@ CSE button styles and options
       // Toggle settings.selected boolean
       if(this.settings.type !== 'disabled') {
         this._set('settings.selected', !this.settings.selected);
-        this._fire('button-clicked', { key: this.btn.id, val: this.settings.selected });
+        this._fire('button-click', { key: this.btn.id, val: this.settings.selected });
         this._toggleClass(this.selectedClass, this.settings.selected, e.currentTarget);
       }
     },
@@ -291,7 +291,7 @@ CSE button styles and options
     /**
     * Fires events: 
     * 1. 'date-changed': on date change {key: ID_OF_CALENDARBUTTON, value: {startdate: dd/mm/yy, enddate: dd/mm/yy}} // 
-    * 2. 'button-clicked': on button click {key: ID_OF_BUTTON, value: boolean}
+    * 2. 'button-click': on button click {key: ID_OF_BUTTON, value: boolean}
     * @event _fire
     */
     _fire: function(eventName, val) {
