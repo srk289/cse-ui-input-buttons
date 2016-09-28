@@ -1,6 +1,6 @@
 {
   "name": "cse-input-buttons",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": [
     "cse-input-buttons.html"
   ],
