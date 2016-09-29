@@ -26,7 +26,7 @@
     "px-buttons-design": "^0.4.26",
     "px-button-group-design": "https://github.com/PredixDev/px-button-group-design.git#^0.3.12",
     "app-datepicker": "^2.8.0",
-    "px-polymer-font-awesome": "^0.1.8",
+    "font-awesome": "*",
     "moment": "^2.15.1"
   },
   "devDependencies": {
