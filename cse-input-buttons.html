@@ -63,7 +63,7 @@ CSE button styles and options
       <div class="btn-group">
 
         <template is="dom-repeat" items="{{settings.items}}">
-          
+          <!-- <span>{{selectedItem}}</span> -->
           <input disabled="{{settings.disabled}}" on-tap="_buttonGroupTap" checked$="[[_getValue(settings.selectedGroup, item.id)]]" id$="{{item.id}}" index="{{index}}" name$="{{btn.id}}" type="{{settings.groupType}}">
           <label disabled="{{settings.disabled}}" for$="{{item.id}}" class$="btn btn--{{settings.type}} btn--{{settings.size}}">
             <template is="dom-if" if="{{item.ico}}">
@@ -148,6 +148,9 @@ CSE button styles and options
       }
     },
     _getValue: function(obj, key) {
+      var me = this;
+      this.selectedItem = obj[key];
+      // console.log(this.selectedItem);
       return obj[key];
     },
     /**

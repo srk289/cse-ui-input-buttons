@@ -1,3 +1,5 @@
+
+
 // This is the wrapper for custom tests, called upon web components ready state
 function runCustomTests() {
   // Place any setup steps like variable declaration and initialization here
@@ -6,12 +8,23 @@ function runCustomTests() {
   // Use testCase(options) for a more convenient setup of the test cases
   suite('Custom Automation Tests for cse-input-buttons', function() {
     // test('Check initial value of counter', function(done){
-    var buttonEl1;
+    var buttonEl1, buttonEl2;
     setup(function() {
       buttonEl1 = Polymer.dom(document).querySelector('#cse_input_buttons_1');
+      buttonEl2 = Polymer.dom(document).querySelector('#cse_input_buttons_2');
+
+      // settings = {};
+      // settings.one = {title: "Title Option 1",  
+      //                   text: "All",
+      //                   type: "default",
+      //                   size: "default",
+      //                   id: "option1"};
+
+      // var inputButton = document.querySelector('#cse_input_buttons_1');
+      // buttonEl1.setAttribute('settings', settings.one);
     });
     
-    test('Should pass valid object', function(done){
+    test('Default Button Should pass valid object', function(done){
       assert.isDefined(buttonEl1.settings, 'Settings must be defined');
       assert.property(buttonEl1.settings, 'id', 'Button should have id');
       assert.property(buttonEl1.settings, 'text', 'Button must have text');
@@ -23,7 +36,7 @@ function runCustomTests() {
 
     test('Clicking on cse-input-button fires "button-clicked" event', function(done){
       var btn = buttonEl1.querySelector('button');
-      buttonEl1.addEventListener('button-clicked', function(e){
+      buttonEl1.addEventListener('button-click', function(e){
         assert.equal(e.detail.key, 'option1');
         assert.equal(e.detail.val, true);
         done();
@@ -33,25 +46,27 @@ function runCustomTests() {
     });
 
     test('Button group valid object', function(done){
-      assert.isDefined(buttonEl1.settings, 'Settings must be defined');
-      assert.property(buttonEl1.settings, 'id', 'Button should have id');
-      assert.property(buttonEl1.settings, 'text', 'Button must have text');
+      assert.isDefined(buttonEl2.settings, 'Settings must be defined');
+      assert.property(buttonEl2.settings, 'id', 'Button should have id');
+      assert.property(buttonEl2.settings, 'items', 'Button must have items');
+      assert.property(buttonEl2.settings, 'groupType', 'Button must have group type (either checkbox or radio)');
+      assert.property(buttonEl2.settings, 'selectedGroup', 'Button must have selectedGroup (either checkbox or radio)');
 
-      assert.typeOf(buttonEl1.settings.id, 'string', 'Id should be a string');
-      assert.typeOf(buttonEl1.settings.text, 'string', 'Text shouldbe a string');
+      assert.typeOf(buttonEl2.settings.id, 'string', 'Id should be a string');
+      assert.typeOf(buttonEl2.settings.items, 'array', 'Items shouldbe of type array');
+      assert.typeOf(buttonEl2.settings.groupType, 'string', 'GroupType shouldbe of type string');
+      assert.typeOf(buttonEl2.settings.selectedGroup, 'object', 'Selected Group shouldbe of type object');
       done();
     });
 
     test('Clicking on cse-input-button fires "button-group-click" event', function(done){
-      var btn1 = buttonEl1.querySelector('button');
-      buttonEl1.addEventListener('button-clicked', function(e){
-        assert.equal(e.detail.key, 'option1');
+      var btn2 = buttonEl2.querySelector('input#one');
+      buttonEl2.addEventListener('button-group-click', function(e){
+        assert.equal(e.detail.val.one, true);
         // assert.equal(e.detail.val, false);
-        
+        done();
       });
-      done();
-      //btn1.click();
-      
+      btn2.click();
     });
   });
 };
