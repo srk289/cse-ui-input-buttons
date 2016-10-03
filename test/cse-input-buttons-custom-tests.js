@@ -12,7 +12,7 @@ function runCustomTests() {
     setup(function() {
       buttonEl1 = Polymer.dom(document).querySelector('#cse_input_buttons_1');
       buttonEl2 = Polymer.dom(document).querySelector('#cse_input_buttons_2');
-
+      buttonEl3 = Polymer.dom(document).querySelector('#cse_input_buttons_3');
       // settings = {};
       // settings.one = {title: "Title Option 1",  
       //                   text: "All",
@@ -45,7 +45,7 @@ function runCustomTests() {
       
     });
 
-    test('Button group valid object', function(done){
+    test('Button group (checkbox) valid object', function(done){
       assert.isDefined(buttonEl2.settings, 'Settings must be defined');
       assert.property(buttonEl2.settings, 'id', 'Button should have id');
       assert.property(buttonEl2.settings, 'items', 'Button must have items');
@@ -59,7 +59,7 @@ function runCustomTests() {
       done();
     });
 
-    test('Clicking on cse-input-button fires "button-group-click" event', function(done){
+    test('Clicking on cse-input-button (checkboxes) fires "button-group-click" event', function(done){
       var btn2 = buttonEl2.querySelector('input#one');
       buttonEl2.addEventListener('button-group-click', function(e){
         assert.equal(e.detail.val.one, true);
@@ -68,5 +68,31 @@ function runCustomTests() {
       });
       btn2.click();
     });
+
+    test('Button group (radio) valid object', function(done){
+      assert.isDefined(buttonEl2.settings, 'Settings must be defined');
+      assert.property(buttonEl2.settings, 'id', 'Button should have id');
+      assert.property(buttonEl2.settings, 'items', 'Button must have items');
+      assert.property(buttonEl2.settings, 'groupType', 'Button must have group type (either checkbox or radio)');
+      assert.property(buttonEl2.settings, 'selectedGroup', 'Button must have selectedGroup (either checkbox or radio)');
+
+      assert.typeOf(buttonEl2.settings.id, 'string', 'Id should be a string');
+      assert.typeOf(buttonEl2.settings.items, 'array', 'Items shouldbe of type array');
+      assert.typeOf(buttonEl2.settings.groupType, 'string', 'GroupType shouldbe of type string');
+      assert.typeOf(buttonEl2.settings.selectedGroup, 'object', 'Selected Group shouldbe of type object');
+      done();
+    });
+
+    test('Clicking on cse-input-button (radio) fires "button-group-click" event', function(done){
+      var btn2 = buttonEl2.querySelector('input#one');
+      buttonEl2.addEventListener('button-group-click', function(e){
+        assert.equal(e.detail.val.one, false);
+        // assert.equal(e.detail.val, false);
+        done();
+      });
+      // btn2.click();
+    });
+
+
   });
 };
