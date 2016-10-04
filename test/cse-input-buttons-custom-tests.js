@@ -70,27 +70,26 @@ function runCustomTests() {
     });
 
     test('Button group (radio) valid object', function(done){
-      assert.isDefined(buttonEl2.settings, 'Settings must be defined');
-      assert.property(buttonEl2.settings, 'id', 'Button should have id');
-      assert.property(buttonEl2.settings, 'items', 'Button must have items');
-      assert.property(buttonEl2.settings, 'groupType', 'Button must have group type (either checkbox or radio)');
-      assert.property(buttonEl2.settings, 'selectedGroup', 'Button must have selectedGroup (either checkbox or radio)');
+      assert.isDefined(buttonEl3.settings, 'Settings must be defined');
+      assert.property(buttonEl3.settings, 'id', 'Button should have id');
+      assert.property(buttonEl3.settings, 'items', 'Button must have items');
+      assert.property(buttonEl3.settings, 'groupType', 'Button must have group type (either checkbox or radio)');
+      assert.property(buttonEl3.settings, 'selectedGroup', 'Button must have selectedGroup (either checkbox or radio)');
 
-      assert.typeOf(buttonEl2.settings.id, 'string', 'Id should be a string');
-      assert.typeOf(buttonEl2.settings.items, 'array', 'Items shouldbe of type array');
-      assert.typeOf(buttonEl2.settings.groupType, 'string', 'GroupType shouldbe of type string');
-      assert.typeOf(buttonEl2.settings.selectedGroup, 'object', 'Selected Group shouldbe of type object');
+      assert.typeOf(buttonEl3.settings.id, 'string', 'Id should be a string');
+      assert.typeOf(buttonEl3.settings.items, 'array', 'Items shouldbe of type array');
+      assert.typeOf(buttonEl3.settings.groupType, 'string', 'GroupType shouldbe of type string');
+      assert.typeOf(buttonEl3.settings.selectedGroup, 'object', 'Selected Group shouldbe of type object');
       done();
     });
 
     test('Clicking on cse-input-button (radio) fires "button-group-click" event', function(done){
-      var btn2 = buttonEl2.querySelector('input#one');
-      buttonEl2.addEventListener('button-group-click', function(e){
-        assert.equal(e.detail.val.one, false);
-        // assert.equal(e.detail.val, false);
+      var btn3 = buttonEl3.querySelector('input#two');
+      buttonEl3.addEventListener('button-group-click', function(e){
+        assert.equal(e.detail.val.two, true);
         done();
       });
-      // btn2.click();
+      btn3.click();
     });
 
 
