@@ -2,7 +2,7 @@ sudo: required
 dist: trusty
 language: node_js
 node_js:
-- stable
+- 4.4.7
 branches:
   except:
   - gh-pages
