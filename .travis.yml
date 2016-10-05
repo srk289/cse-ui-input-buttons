@@ -14,8 +14,7 @@ addons:
     packages:
     - google-chrome-stable
 before_script:
-- npm install web-component-tester
-- npm install bower
+- npm install -g bower web-component-tester
 - export PATH=$PWD/node_modules/.bin:$PATH
 - bower install
 script:
