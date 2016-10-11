@@ -19,4 +19,4 @@ before_script:
 - export PATH=$PWD/node_modules/.bin:$PATH
 - bower install
 script:
-- xvfb-run wct
+- wct
