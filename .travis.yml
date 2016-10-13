@@ -12,8 +12,7 @@ addons:
     packages:
     - google-chrome-stable
 before_script:
-- npm install
-- npm update
-- bower install
+- npm install && npm update
+- bower install && bower update
 script:
 - xvfb-run -a wct
