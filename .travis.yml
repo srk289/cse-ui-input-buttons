@@ -15,6 +15,7 @@ addons:
     - google-chrome-stable
 before_script:
 - npm install
+- npm update
 - bower install
 script:
-- xvfb-run wct
+- xvfb-run -a wct --skip-selenium-install
