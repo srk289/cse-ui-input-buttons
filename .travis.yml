@@ -16,4 +16,4 @@ before_script:
 - npm update
 - bower install
 script:
-- xvfb-run -a wct --skip-selenium-install
+- xvfb-run -a wct
