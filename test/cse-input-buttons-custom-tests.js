@@ -86,7 +86,7 @@ function runCustomTests() {
     test('Clicking on cse-input-button (radio) fires "button-group-click" event', function(done){
       var btn3 = buttonEl3.querySelector('input#two');
       buttonEl3.addEventListener('button-group-click', function(e){
-        assert.equal(e.detail.val.two, false);
+        assert.equal(e.detail.val.two, true);
         done();
       });
       btn3.click();
